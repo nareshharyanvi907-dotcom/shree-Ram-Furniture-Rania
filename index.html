@@ -1,116 +1,19 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Shri Ram Furniture & Electronics House - Rania</title>
+  <title>Product Store</title>
   <style>
-    body{
-      margin:0;
-      font-family: Arial, Helvetica, sans-serif;
-      background: linear-gradient(135deg,#dff9fb,#c7ecee);
-    }
-    header{
-      background: linear-gradient(135deg,#0984e3,#00cec9);
-      color:#fff;
-      padding:15px;
-      text-align:center;
-    }
-    .marquee{
-      background:#0a3d62;
-      color:white;
-      padding:6px;
-      font-size:14px;
-    }
-    .search-box{
-      padding:10px;
-      text-align:center;
-    }
-    .search-box input{
-      width:90%;
-      padding:12px;
-      border-radius:25px;
-      border:1px solid #ccc;
-      font-size:16px;
-    }
-    .products{
-      display:grid;
-      grid-template-columns: repeat(auto-fit,minmax(160px,1fr));
-      gap:12px;
-      padding:12px;
-    }
-    .card{
-      background:white;
-      border-radius:10px;
-      box-shadow:0 3px 8px rgba(0,0,0,0.15);
-      padding:10px;
-      text-align:center;
-    }
-    .card img{
-      width:100%;
-      height:130px;
-      object-fit:cover;
-      border-radius:8px;
-    }
-    .price{
-      color:green;
-      font-weight:bold;
-    }
-    footer{
-      background:#0a3d62;
-      color:white;
-      text-align:center;
-      padding:10px;
-      margin-top:15px;
-    }
+    body{font-family:Arial;background:#eaf7ff;padding:15px}
+    .box{background:white;padding:10px;margin:10px;border-radius:6px;text-align:center}
+    img{width:100%;height:180px;object-fit:cover}
   </style>
 </head>
 <body>
 
-<header>
-  <h2>Shri Ram Furniture & Electronics House - Rania</h2>
-</header>
+<h2>Our Products</h2>
 
-<marquee class="marquee">📞 Contact: 99999-99999 | Best Furniture & Electronics Shop in Rania</marquee>
+<div id="products"></div>
 
-<div class="search-box">
-  <input type="text" id="search" placeholder="Search product..." onkeyup="searchProduct()">
-</div>
-
-<div class="products" id="productList"></div>
-
-<footer>© 2026 Shri Ram Furniture & Electronics</footer>
-
-<script>
-let products = JSON.parse(localStorage.getItem("products")) || [
-  {name:"Wooden Bed",price:"15000",category:"bed",img:"https://i.imgur.com/1Q9Z1Zm.jpg"},
-  {name:"Sofa Set",price:"22000",category:"sofa",img:"https://i.imgur.com/70bP3aO.jpg"},
-  {name:"Ceiling Fan",price:"2200",category:"fan",img:"https://i.imgur.com/Z9aJ7QK.jpg"},
-  {name:"Double Door Fridge",price:"28000",category:"fridge",img:"https://i.imgur.com/dDg9xXb.jpg"}
-];
-
-function showProducts(list){
-  let box = document.getElementById("productList");
-  box.innerHTML="";
-  list.forEach((p,i)=>{
-    box.innerHTML += `
-      <div class="card">
-        <img src="${p.img}">
-        <h4>${p.name}</h4>
-        <p class="price">₹ ${p.price}</p>
-      </div>
-    `;
-  });
-}
-
-function searchProduct(){
-  let key = document.getElementById("search").value.toLowerCase();
-  let filtered = products.filter(p => p.name.toLowerCase().includes(key) || p.category.toLowerCase().includes(key));
-  showProducts(filtered);
-}
-
-showProducts(products);
-</script>
-
+<script src="script.js"></script>
 </body>
 </html>
