@@ -3,6 +3,8 @@ function loadProducts() {
   const products = JSON.parse(localStorage.getItem("products")) || [];
   const container = document.getElementById("productList");
 
+  if (!container) return;
+
   container.innerHTML = "";
 
   if (products.length === 0) {
@@ -10,20 +12,27 @@ function loadProducts() {
     return;
   }
 
-  products.forEach((p, i) => {
+  products.forEach((p) => {
     container.innerHTML += `
       <div class="card">
-        <img src="${p.image}" onclick="openModal(this.src)" style="cursor:zoom-in;">
+        <img src="${p.image}" onclick="openModal('${p.image}')"
+             style="cursor:zoom-in;">
+
         <h3>${p.name}</h3>
         <p>₹ ${p.price}</p>
 
-        <a href="https://wa.me/919812100187?text=Hello%20I%20want%20to%20buy%20${encodeURIComponent(p.name)}%20Price:%20₹${p.price}" 
-           target="_blank">
-           <button>Buy Now</button>
-        </a>
+        <button onclick="buyNow('${p.name}','${p.price}')">Buy Now</button>
       </div>
     `;
   });
+}
+
+// WhatsApp redirect
+function buyNow(name, price) {
+  let phone = "919812100187";
+  let msg = "Hello, I want to buy " + name + " Price ₹" + price;
+  let url = "https://wa.me/" + phone + "?text=" + encodeURIComponent(msg);
+  window.open(url, "_blank");
 }
 
 // Admin panel functions
@@ -48,7 +57,6 @@ function addProduct() {
   showAdminProducts();
 }
 
-// Show products in admin panel
 function showAdminProducts() {
   const products = JSON.parse(localStorage.getItem("products")) || [];
   const list = document.getElementById("adminList");
@@ -69,7 +77,6 @@ function showAdminProducts() {
   });
 }
 
-// Delete product
 function deleteProduct(index) {
   const products = JSON.parse(localStorage.getItem("products")) || [];
   products.splice(index, 1);
