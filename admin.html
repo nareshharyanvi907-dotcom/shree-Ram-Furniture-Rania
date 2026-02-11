@@ -1,72 +1,77 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>Admin Panel - Shri Ram Furniture</title>
-<style>
-body{font-family:Arial;background:#111;color:white;padding:20px}
-input,select,button{padding:10px;margin:5px;width:100%;border-radius:5px;border:none}
-button{background:#00c6ff;color:black;font-weight:bold}
-.card{background:#1f1f1f;padding:15px;border-radius:10px;margin-bottom:15px}
-h2{text-align:center;color:#00c6ff}
-</style>
+  <meta charset="UTF-8">
+  <title>Admin Panel</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body{font-family:Arial;background:#f1f2f6;padding:10px}
+    h2{text-align:center}
+    input,select,button{
+      width:100%;padding:10px;margin:5px 0;border-radius:6px;border:1px solid #ccc
+    }
+    button{background:#0984e3;color:white;border:none}
+    .list{background:white;padding:10px;border-radius:8px;margin-top:10px}
+    .item{border-bottom:1px solid #eee;padding:5px}
+  </style>
 </head>
 <body>
 
-<h2>Admin Dashboard</h2>
+<h2>Admin Panel</h2>
 
-<div class="card">
-<h3>Add Product</h3>
-<input id="name" placeholder="Item Name">
+<input id="name" placeholder="Product Name">
 <input id="price" placeholder="Price">
 <input id="img" placeholder="Image URL">
-<select id="cat"></select>
+<select id="cat">
+  <option value="bed">Bed</option>
+  <option value="sofa">Sofa</option>
+  <option value="fan">Fan</option>
+  <option value="fridge">Fridge</option>
+  <option value="cooler">Cooler</option>
+  <option value="ac">AC</option>
+  <option value="table">Table</option>
+</select>
+
 <button onclick="addProduct()">Add Product</button>
-</div>
 
-<div class="card">
-<h3>All Products</h3>
-<div id="list"></div>
-</div>
-
-<script src="data.js"></script>
+<div class="list" id="list"></div>
 
 <script>
-let catSel=document.getElementById("cat");
-siteData.categories.forEach(c=>{
-  let o=document.createElement("option");
-  o.value=c;o.innerText=c;
-  catSel.appendChild(o);
-});
+let products = JSON.parse(localStorage.getItem("products")) || [];
+
+function save(){
+  localStorage.setItem("products",JSON.stringify(products));
+  show();
+}
 
 function addProduct(){
-  siteData.products.push({
-    name:name.value,
-    price:price.value,
-    img:img.value,
-    cat:cat.value
+  products.push({
+    name: name.value,
+    price: price.value,
+    img: img.value,
+    category: cat.value
   });
-  localStorage.setItem("siteData",JSON.stringify(siteData));
-  alert("Product Added");
-  show();
+  save();
 }
 
 function del(i){
-  siteData.products.splice(i,1);
-  localStorage.setItem("siteData",JSON.stringify(siteData));
-  show();
+  products.splice(i,1);
+  save();
 }
 
 function show(){
-  let h="";
-  siteData.products.forEach((p,i)=>{
-    h+=`<div class='card'>
-      ${p.name} | ₹${p.price} | ${p.cat}
-      <button onclick='del(${i})'>Delete</button>
-    </div>`;
+  let box=document.getElementById("list");
+  box.innerHTML="";
+  products.forEach((p,i)=>{
+    box.innerHTML+=`
+      <div class="item">
+        ${p.name} - ₹${p.price}
+        <button onclick="del(${i})">Delete</button>
+      </div>
+    `;
   });
-  list.innerHTML=h;
 }
+
 show();
 </script>
 
