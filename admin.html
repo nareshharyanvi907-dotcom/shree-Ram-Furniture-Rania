@@ -1,78 +1,56 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="UTF-8">
-  <title>Admin Panel</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <style>
-    body{font-family:Arial;background:#f1f2f6;padding:10px}
-    h2{text-align:center}
-    input,select,button{
-      width:100%;padding:10px;margin:5px 0;border-radius:6px;border:1px solid #ccc
-    }
-    button{background:#0984e3;color:white;border:none}
-    .list{background:white;padding:10px;border-radius:8px;margin-top:10px}
-    .item{border-bottom:1px solid #eee;padding:5px}
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Panel</title>
+<script src="script.js"></script>
+<style>
+body{font-family:Arial;background:#eef2f3;padding:20px;}
+input,button{width:100%;padding:10px;margin:6px;border-radius:6px;border:1px solid #ccc;}
+button{background:#007bff;color:white;border:none;font-size:16px;}
+.card{background:white;padding:10px;margin:10px;border-radius:8px;}
+</style>
 </head>
+
 <body>
 
-<h2>Admin Panel</h2>
+<h2>Admin Panel – Add Product</h2>
 
 <input id="name" placeholder="Product Name">
 <input id="price" placeholder="Price">
 <input id="img" placeholder="Image URL">
-<select id="cat">
-  <option value="bed">Bed</option>
-  <option value="sofa">Sofa</option>
-  <option value="fan">Fan</option>
-  <option value="fridge">Fridge</option>
-  <option value="cooler">Cooler</option>
-  <option value="ac">AC</option>
-  <option value="table">Table</option>
-</select>
+<input id="cat" placeholder="Category">
 
-<button onclick="addProduct()">Add Product</button>
+<button onclick="add()">Add Product</button>
 
-<div class="list" id="list"></div>
+<h3>All Products</h3>
+<div id="list"></div>
 
 <script>
-let products = JSON.parse(localStorage.getItem("products")) || [];
-
-function save(){
-  localStorage.setItem("products",JSON.stringify(products));
-  show();
+function add(){
+  addProduct(
+    name.value,
+    price.value,
+    img.value,
+    cat.value
+  );
+  location.reload();
 }
 
-function addProduct(){
-  products.push({
-    name: name.value,
-    price: price.value,
-    img: img.value,
-    category: cat.value
-  });
-  save();
-}
-
-function del(i){
-  products.splice(i,1);
-  save();
-}
-
-function show(){
-  let box=document.getElementById("list");
-  box.innerHTML="";
-  products.forEach((p,i)=>{
-    box.innerHTML+=`
-      <div class="item">
-        ${p.name} - ₹${p.price}
-        <button onclick="del(${i})">Delete</button>
+function load(){
+  let html="";
+  store.forEach((p,i)=>{
+    html+=`
+      <div class="card">
+        <b>${p.name}</b> - ₹${p.price}
+        <button onclick="deleteProduct(${i})">Delete</button>
       </div>
     `;
   });
+  document.getElementById("list").innerHTML=html;
 }
-
-show();
+load();
 </script>
 
 </body>
