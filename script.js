@@ -1,63 +1,80 @@
-let products = JSON.parse(localStorage.getItem("products")) || [];
+// Load products on website
+function loadProducts() {
+  const products = JSON.parse(localStorage.getItem("products")) || [];
+  const container = document.getElementById("productList");
 
-function addProduct(){
-  let name = document.getElementById("name").value;
-  let price = document.getElementById("price").value;
-  let image = document.getElementById("image").value;
+  if (!container) return;
 
-  if(name=="" || price=="" || image==""){
-    alert("Fill all fields");
+  container.innerHTML = "";
+
+  if (products.length === 0) {
+    container.innerHTML = "<p style='text-align:center;'>No products added yet</p>";
     return;
   }
 
-  products.push({name,price,image});
-  localStorage.setItem("products", JSON.stringify(products));
-  loadTable();
-  alert("Product Added");
-
-  document.getElementById("name").value="";
-  document.getElementById("price").value="";
-  document.getElementById("image").value="";
-}
-
-function loadTable(){
-  let table = document.getElementById("table");
-  if(!table) return;
-
-  table.innerHTML = "";
-  products.forEach((p,i)=>{
-    table.innerHTML += `
-      <tr>
-        <td><img src="${p.image}" width="60"></td>
-        <td>${p.name}</td>
-        <td>₹${p.price}</td>
-        <td><button onclick="deleteProduct(${i})">Delete</button></td>
-      </tr>
-    `;
-  });
-}
-
-function deleteProduct(index){
-  products.splice(index,1);
-  localStorage.setItem("products", JSON.stringify(products));
-  loadTable();
-}
-
-function showProducts(){
-  let box = document.getElementById("products");
-  if(!box) return;
-
-  box.innerHTML = "";
-  products.forEach(p=>{
-    box.innerHTML += `
-      <div class="box">
-        <img src="${p.image}">
+  products.forEach((p, i) => {
+    container.innerHTML += `
+      <div class="card">
+        <img src="${p.image}" />
         <h3>${p.name}</h3>
-        <h4>₹${p.price}</h4>
+        <p>₹ ${p.price}</p>
+        <button>Buy Now</button>
       </div>
     `;
   });
 }
 
-loadTable();
-showProducts();
+// Add product from admin panel
+function addProduct() {
+  const name = document.getElementById("pname").value;
+  const price = document.getElementById("pprice").value;
+  const image = document.getElementById("pimage").value;
+
+  if (!name || !price || !image) {
+    alert("Fill all fields");
+    return;
+  }
+
+  const products = JSON.parse(localStorage.getItem("products")) || [];
+
+  products.push({ name, price, image });
+
+  localStorage.setItem("products", JSON.stringify(products));
+
+  alert("Product Added Successfully");
+
+  document.getElementById("pname").value = "";
+  document.getElementById("pprice").value = "";
+  document.getElementById("pimage").value = "";
+
+  showAdminProducts();
+}
+
+// Show products in admin panel
+function showAdminProducts() {
+  const products = JSON.parse(localStorage.getItem("products")) || [];
+  const list = document.getElementById("adminList");
+
+  if (!list) return;
+
+  list.innerHTML = "";
+
+  products.forEach((p, i) => {
+    list.innerHTML += `
+      <div class="admin-card">
+        <img src="${p.image}">
+        <b>${p.name}</b>
+        <p>₹ ${p.price}</p>
+        <button onclick="deleteProduct(${i})">Delete</button>
+      </div>
+    `;
+  });
+}
+
+// Delete product
+function deleteProduct(index) {
+  const products = JSON.parse(localStorage.getItem("products")) || [];
+  products.splice(index, 1);
+  localStorage.setItem("products", JSON.stringify(products));
+  showAdminProducts();
+}
