@@ -1,38 +1,155 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Admin Dashboard</title>
   <style>
-    body{font-family:Arial;padding:20px;background:#f2f6ff}
-    input,button{padding:10px;margin:5px;width:100%}
-    table{width:100%;border-collapse:collapse;margin-top:15px;background:white}
-    th,td{border:1px solid #ccc;padding:8px;text-align:center}
-    th{background:#007bff;color:white}
-    button{cursor:pointer}
+    body{
+      font-family: Arial, sans-serif;
+      background:#f4f6f8;
+      margin:0;
+    }
+    header{
+      background:#0d6efd;
+      color:#fff;
+      padding:15px;
+      text-align:center;
+      font-size:20px;
+    }
+    .container{
+      padding:15px;
+      max-width:1000px;
+      margin:auto;
+    }
+    .form-box{
+      background:#fff;
+      padding:15px;
+      border-radius:8px;
+      box-shadow:0 0 10px rgba(0,0,0,0.1);
+      margin-bottom:20px;
+    }
+    .form-box h3{
+      margin-top:0;
+    }
+    input, button{
+      width:100%;
+      padding:10px;
+      margin:8px 0;
+      border:1px solid #ccc;
+      border-radius:5px;
+      font-size:16px;
+    }
+    button{
+      background:#0d6efd;
+      color:#fff;
+      border:none;
+      cursor:pointer;
+    }
+    button:hover{
+      background:#084298;
+    }
+    table{
+      width:100%;
+      border-collapse:collapse;
+      background:#fff;
+      box-shadow:0 0 10px rgba(0,0,0,0.1);
+    }
+    th, td{
+      padding:10px;
+      border:1px solid #ddd;
+      text-align:center;
+    }
+    th{
+      background:#0d6efd;
+      color:#fff;
+    }
+    img{
+      width:60px;
+      border-radius:5px;
+    }
+    .del{
+      background:red;
+    }
   </style>
 </head>
 <body>
 
-<h2>Admin Dashboard</h2>
+<header>Admin Dashboard - Product Manager</header>
 
-<input id="name" placeholder="Product Name">
-<input id="price" placeholder="Price">
-<input id="image" placeholder="Image URL">
+<div class="container">
 
-<button onclick="addProduct()">Add Product</button>
+  <div class="form-box">
+    <h3>Add New Product</h3>
+    <input id="name" placeholder="Product Name">
+    <input id="price" placeholder="Price">
+    <input id="image" placeholder="Image URL">
+    <button onclick="addProduct()">Add Product</button>
+  </div>
 
-<table>
-<thead>
-<tr>
-<th>Image</th>
-<th>Name</th>
-<th>Price</th>
-<th>Delete</th>
-</tr>
-</thead>
-<tbody id="table"></tbody>
-</table>
+  <table>
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Image</th>
+        <th>Name</th>
+        <th>Price</th>
+        <th>Delete</th>
+      </tr>
+    </thead>
+    <tbody id="productTable"></tbody>
+  </table>
 
-<script src="script.js"></script>
+</div>
+
+<script>
+let products = JSON.parse(localStorage.getItem("products")) || [];
+
+function showProducts(){
+  let table = document.getElementById("productTable");
+  table.innerHTML = "";
+
+  products.forEach((p, i) => {
+    table.innerHTML += `
+      <tr>
+        <td>${i+1}</td>
+        <td><img src="${p.image}"></td>
+        <td>${p.name}</td>
+        <td>₹ ${p.price}</td>
+        <td><button class="del" onclick="deleteProduct(${i})">Delete</button></td>
+      </tr>
+    `;
+  });
+}
+
+function addProduct(){
+  let name = document.getElementById("name").value;
+  let price = document.getElementById("price").value;
+  let image = document.getElementById("image").value;
+
+  if(name=="" || price=="" || image==""){
+    alert("Please fill all fields");
+    return;
+  }
+
+  products.push({name, price, image});
+  localStorage.setItem("products", JSON.stringify(products));
+
+  document.getElementById("name").value="";
+  document.getElementById("price").value="";
+  document.getElementById("image").value="";
+
+  showProducts();
+}
+
+function deleteProduct(index){
+  products.splice(index,1);
+  localStorage.setItem("products", JSON.stringify(products));
+  showProducts();
+}
+
+showProducts();
+</script>
+
 </body>
 </html>
