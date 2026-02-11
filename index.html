@@ -26,5 +26,39 @@ button{background:#0099ff;color:#fff;border:none;padding:7px 10px;border-radius:
 <div id="productList"></div>
 
 <script src="script.js"></script>
+<div id="imgModal" style="
+display:none;
+position:fixed;
+z-index:9999;
+left:0; top:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.85);
+justify-content:center;
+align-items:center;
+">
+  <span onclick="closeModal()" style="
+  position:absolute;
+  top:15px;
+  right:25px;
+  color:white;
+  font-size:35px;
+  cursor:pointer;">&times;</span>
+
+  <img id="modalImg" style="
+  max-width:95%;
+  max-height:90%;
+  border-radius:10px;">
+</div>
+
+<script>
+function openModal(src){
+  document.getElementById("imgModal").style.display="flex";
+  document.getElementById("modalImg").src = src;
+}
+function closeModal(){
+  document.getElementById("imgModal").style.display="none";
+}
+</script>
 </body>
 </html>
