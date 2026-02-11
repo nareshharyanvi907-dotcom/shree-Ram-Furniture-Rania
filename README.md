@@ -1,170 +1,174 @@
-<?php
-session_start();
-
-// -------- BASIC SETTINGS ----------
-$shop_name = "Shri Ram Furniture And Electronics House - Rania";
-$phone = "919812100187";
-$address = "Near Gaushala, Jiwan Nagar Road, Rania, Haryana";
-
-// Simple file database
-$data_file = "data.json";
-if(!file_exists($data_file)){
-    file_put_contents($data_file, json_encode([
-        "categories"=>[],
-        "products"=>[]
-    ]));
-}
-$data = json_decode(file_get_contents($data_file), true);
-
-// ---------- ADMIN LOGIN ----------
-if(isset($_POST['login'])){
-    if($_POST['user']=="admin" && $_POST['pass']=="12345"){
-        $_SESSION['admin']=true;
-    }
-}
-
-if(isset($_GET['logout'])){
-    session_destroy();
-    header("location:index.php");
-}
-
-// ---------- ADD CATEGORY ----------
-if(isset($_POST['add_cat'])){
-    $data['categories'][] = [
-        "name"=>$_POST['catname'],
-        "img"=>$_POST['catimg']
-    ];
-    file_put_contents($data_file,json_encode($data));
-}
-
-// ---------- ADD PRODUCT ----------
-if(isset($_POST['add_pro'])){
-    $data['products'][] = [
-        "cat"=>$_POST['cat'],
-        "name"=>$_POST['name'],
-        "price"=>$_POST['price'],
-        "war"=>$_POST['war'],
-        "img"=>$_POST['img']
-    ];
-    file_put_contents($data_file,json_encode($data));
-}
-?>
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title><?php echo $shop_name ?></title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shri Ram Furniture And Electronics House - Rania</title>
+
 <style>
-body{margin:0;font-family:Arial;background:#f5f5f5}
-header{background:#0b3c5d;color:#fff;text-align:center;padding:15px}
-.slider img{width:100%;height:220px;object-fit:cover}
-.search{padding:10px;text-align:center}
-.search input{width:90%;padding:10px;border-radius:8px;border:1px solid #ccc}
-h2{text-align:center}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;padding:10px}
-.box{background:#fff;border-radius:10px;padding:10px;text-align:center}
-.box img{width:100%;height:100px;object-fit:cover;border-radius:8px}
-.btn{display:inline-block;background:green;color:white;padding:6px 12px;border-radius:5px;text-decoration:none;margin-top:5px}
-.admin{background:#fff;margin:10px;padding:10px;border-radius:10px}
-input,button,select{padding:8px;margin:5px;width:100%}
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,Helvetica,sans-serif;}
+body{background:#f5f5f5;}
+
+header{
+background:#0d6efd;
+color:#fff;
+padding:15px;
+text-align:center;
+font-size:22px;
+font-weight:bold;
+}
+
+.search-box{
+padding:10px;
+background:#fff;
+}
+
+.search-box input{
+width:100%;
+padding:10px;
+border:1px solid #ccc;
+border-radius:5px;
+}
+
+.slider img{
+width:100%;
+height:200px;
+object-fit:cover;
+}
+
+.category-grid{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:10px;
+padding:10px;
+}
+
+.category{
+background:#fff;
+padding:10px;
+border-radius:8px;
+text-align:center;
+font-weight:bold;
+box-shadow:0 0 5px rgba(0,0,0,0.1);
+}
+
+.products{
+padding:10px;
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:10px;
+}
+
+.product{
+background:#fff;
+padding:10px;
+border-radius:8px;
+box-shadow:0 0 5px rgba(0,0,0,0.1);
+}
+
+.product img{
+width:100%;
+height:150px;
+object-fit:cover;
+border-radius:5px;
+}
+
+.product h3{
+font-size:14px;
+margin:5px 0;
+}
+
+.price{
+color:green;
+font-weight:bold;
+}
+
+.buy-btn{
+display:block;
+text-align:center;
+background:#25d366;
+color:#fff;
+padding:8px;
+border-radius:5px;
+margin-top:5px;
+text-decoration:none;
+font-weight:bold;
+}
+
+footer{
+text-align:center;
+padding:15px;
+background:#222;
+color:#fff;
+font-size:14px;
+margin-top:20px;
+}
 </style>
+
 </head>
 <body>
 
-<header>
-<h1><?php echo $shop_name ?></h1>
-<p><?php echo $address ?> | 📞 9812100187</p>
-</header>
+<header>Shri Ram Furniture And Electronics House - Rania</header>
+
+<div class="search-box">
+<input type="text" placeholder="Search products...">
+</div>
 
 <div class="slider">
-<img id="slide" src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7">
+<img src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc">
 </div>
 
-<div class="search">
-<input type="text" id="search" placeholder="Search products...">
+<div class="category-grid">
+<div class="category">Sofa</div>
+<div class="category">Bed</div>
+<div class="category">Mattress</div>
+<div class="category">Chair</div>
+<div class="category">Fridge</div>
+<div class="category">Washing Machine</div>
+<div class="category">AC</div>
+<div class="category">Cooler</div>
+<div class="category">Fan</div>
+<div class="category">Geyser</div>
+<div class="category">Mixer</div>
+<div class="category">LED TV</div>
 </div>
 
-<h2>Categories</h2>
-<div class="grid">
-<?php foreach($data['categories'] as $c){ ?>
-<div class="box">
-<img src="<?php echo $c['img'] ?>">
-<h4><?php echo $c['name'] ?></h4>
-</div>
-<?php } ?>
-</div>
+<div class="products">
 
-<h2>Products</h2>
-<div class="grid" id="products">
-<?php foreach($data['products'] as $p){ 
-$msg="Hello, mujhe ".$p['name']." buy karna hai";
-?>
-<div class="box">
-<img src="<?php echo $p['img'] ?>">
-<h4><?php echo $p['name'] ?></h4>
-<p>₹<?php echo $p['price'] ?></p>
-<small>Warranty: <?php echo $p['war'] ?></small><br>
-<a class="btn" href="https://wa.me/<?php echo $phone ?>?text=<?php echo urlencode($msg) ?>">Buy Now</a>
-</div>
-<?php } ?>
+<div class="product">
+<img src="https://images.unsplash.com/photo-1582582494700-58fdb45c3d22">
+<h3>Luxury Sofa Set</h3>
+<div class="price">₹25,999</div>
+<a class="buy-btn" href="https://wa.me/919812100187?text=I want to buy Luxury Sofa Set">Buy on WhatsApp</a>
 </div>
 
-<hr>
-
-<?php if(!isset($_SESSION['admin'])){ ?>
-
-<div class="admin">
-<h2>Admin Login</h2>
-<form method="post">
-<input name="user" placeholder="Username">
-<input type="password" name="pass" placeholder="Password">
-<button name="login">Login</button>
-</form>
-<p><b>Default Login:</b> admin / 12345</p>
+<div class="product">
+<img src="https://images.unsplash.com/photo-1586105251261-72a756497a11">
+<h3>Double Bed</h3>
+<div class="price">₹18,500</div>
+<a class="buy-btn" href="https://wa.me/919812100187?text=I want to buy Double Bed">Buy on WhatsApp</a>
 </div>
 
-<?php } else { ?>
-
-<div class="admin">
-<h2>Admin Dashboard</h2>
-<a href="?logout=1">Logout</a>
-
-<h3>Add Category</h3>
-<form method="post">
-<input name="catname" placeholder="Category Name">
-<input name="catimg" placeholder="Category Image URL">
-<button name="add_cat">Add Category</button>
-</form>
-
-<h3>Add Product</h3>
-<form method="post">
-<select name="cat">
-<?php foreach($data['categories'] as $c){ ?>
-<option><?php echo $c['name'] ?></option>
-<?php } ?>
-</select>
-<input name="name" placeholder="Product Name">
-<input name="price" placeholder="Price">
-<input name="war" placeholder="Warranty">
-<input name="img" placeholder="Image URL">
-<button name="add_pro">Add Product</button>
-</form>
+<div class="product">
+<img src="https://images.unsplash.com/photo-1588854337221-4cf9fa96059c">
+<h3>LED Smart TV</h3>
+<div class="price">₹29,999</div>
+<a class="buy-btn" href="https://wa.me/919812100187?text=I want to buy LED Smart TV">Buy on WhatsApp</a>
 </div>
 
-<?php } ?>
+<div class="product">
+<img src="https://images.unsplash.com/photo-1606813902917-2a8f3dba5a24">
+<h3>Single Door Fridge</h3>
+<div class="price">₹15,800</div>
+<a class="buy-btn" href="https://wa.me/919812100187?text=I want to buy Fridge">Buy on WhatsApp</a>
+</div>
 
-<script>
-let slides=[
-"https://images.unsplash.com/photo-1586023492125-27b2c045efd7",
-"https://images.unsplash.com/photo-1616486701797-0f33f61038ec",
-"https://images.unsplash.com/photo-1555041469-a586c61ea9bc"
-];
-let i=0;
-setInterval(()=>{
-document.getElementById("slide").src=slides[i];
-i=(i+1)%slides.length;
-},3000);
-</script>
+</div>
+
+<footer>
+📍 Near Gaushala, Jiwan Nagar Road, Rania, Haryana <br>
+📞 919812100187
+</footer>
 
 </body>
 </html>
