@@ -1,1 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Admin Panel - Shri Ram Furniture</title>
+<style>
+body{font-family:Arial;background:#111;color:white;padding:20px}
+input,select,button{padding:10px;margin:5px;width:100%;border-radius:5px;border:none}
+button{background:#00c6ff;color:black;font-weight:bold}
+.card{background:#1f1f1f;padding:15px;border-radius:10px;margin-bottom:15px}
+h2{text-align:center;color:#00c6ff}
+</style>
+</head>
+<body>
 
+<h2>Admin Dashboard</h2>
+
+<div class="card">
+<h3>Add Product</h3>
+<input id="name" placeholder="Item Name">
+<input id="price" placeholder="Price">
+<input id="img" placeholder="Image URL">
+<select id="cat"></select>
+<button onclick="addProduct()">Add Product</button>
+</div>
+
+<div class="card">
+<h3>All Products</h3>
+<div id="list"></div>
+</div>
+
+<script src="data.js"></script>
+
+<script>
+let catSel=document.getElementById("cat");
+siteData.categories.forEach(c=>{
+  let o=document.createElement("option");
+  o.value=c;o.innerText=c;
+  catSel.appendChild(o);
+});
+
+function addProduct(){
+  siteData.products.push({
+    name:name.value,
+    price:price.value,
+    img:img.value,
+    cat:cat.value
+  });
+  localStorage.setItem("siteData",JSON.stringify(siteData));
+  alert("Product Added");
+  show();
+}
+
+function del(i){
+  siteData.products.splice(i,1);
+  localStorage.setItem("siteData",JSON.stringify(siteData));
+  show();
+}
+
+function show(){
+  let h="";
+  siteData.products.forEach((p,i)=>{
+    h+=`<div class='card'>
+      ${p.name} | ₹${p.price} | ${p.cat}
+      <button onclick='del(${i})'>Delete</button>
+    </div>`;
+  });
+  list.innerHTML=h;
+}
+show();
+</script>
+
+</body>
+</html>
