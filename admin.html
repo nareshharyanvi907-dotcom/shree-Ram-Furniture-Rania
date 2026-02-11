@@ -1,57 +1,38 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Admin Panel</title>
-<script src="script.js"></script>
-<style>
-body{font-family:Arial;background:#eef2f3;padding:20px;}
-input,button{width:100%;padding:10px;margin:6px;border-radius:6px;border:1px solid #ccc;}
-button{background:#007bff;color:white;border:none;font-size:16px;}
-.card{background:white;padding:10px;margin:10px;border-radius:8px;}
-</style>
+  <title>Admin Dashboard</title>
+  <style>
+    body{font-family:Arial;padding:20px;background:#f2f6ff}
+    input,button{padding:10px;margin:5px;width:100%}
+    table{width:100%;border-collapse:collapse;margin-top:15px;background:white}
+    th,td{border:1px solid #ccc;padding:8px;text-align:center}
+    th{background:#007bff;color:white}
+    button{cursor:pointer}
+  </style>
 </head>
-
 <body>
 
-<h2>Admin Panel – Add Product</h2>
+<h2>Admin Dashboard</h2>
 
 <input id="name" placeholder="Product Name">
 <input id="price" placeholder="Price">
-<input id="img" placeholder="Image URL">
-<input id="cat" placeholder="Category">
+<input id="image" placeholder="Image URL">
 
-<button onclick="add()">Add Product</button>
+<button onclick="addProduct()">Add Product</button>
 
-<h3>All Products</h3>
-<div id="list"></div>
+<table>
+<thead>
+<tr>
+<th>Image</th>
+<th>Name</th>
+<th>Price</th>
+<th>Delete</th>
+</tr>
+</thead>
+<tbody id="table"></tbody>
+</table>
 
-<script>
-function add(){
-  addProduct(
-    name.value,
-    price.value,
-    img.value,
-    cat.value
-  );
-  location.reload();
-}
-
-function load(){
-  let html="";
-  store.forEach((p,i)=>{
-    html+=`
-      <div class="card">
-        <b>${p.name}</b> - ₹${p.price}
-        <button onclick="deleteProduct(${i})">Delete</button>
-      </div>
-    `;
-  });
-  document.getElementById("list").innerHTML=html;
-}
-load();
-</script>
-
+<script src="script.js"></script>
 </body>
 </html>
